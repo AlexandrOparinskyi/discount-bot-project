@@ -13,7 +13,7 @@ logging.basicConfig(
     filename='debug.txt',
     filemode='a',
     level=logging.INFO,
-    format="%(levelname)s | %(name)s | %(asctime)s | %(message)s"
+    format=f"%(levelname)s | %(name)s | %(asctime)s | %(message)s"
 )
 
 

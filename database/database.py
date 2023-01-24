@@ -11,9 +11,9 @@ class ConnectDB:
     def exists_user(self, user_id) -> bool:
         """Проверка наличия пользователя в БД"""
         result = self.cursor.execute(
-            "SELECT 'id' FROM 'users' WHERE 'user_id' = (?)", (user_id,)
+            "SELECT * FROM 'users' WHERE user_id = ?", (user_id,)
         )
-        return bool(list(result.fetchall()))
+        return bool(result.fetchone())
 
     def add_user(self, user_id) -> NoReturn:
         """Добавление пользователя в БД"""
@@ -25,9 +25,9 @@ class ConnectDB:
     def exists_item(self, article) -> bool:
         """Проверка наличия товара в БД"""
         result = self.cursor.execute(
-            "SELECT 'id' FROM 'items' WHERE 'article' = (?)", (article,)
+            "SELECT 'id' FROM 'items' WHERE article = ?", (article,)
         )
-        return bool(list(result.fetchall()))
+        return bool(result.fetchall())
 
     def add_item(self, article, title, url, img) -> NoReturn:
         """Добавление товара в БД"""
@@ -39,6 +39,3 @@ class ConnectDB:
     def close(self) -> NoReturn:
         """Закрытие БД"""
         self.connect.close()
-
-
-db = ConnectDB('database.db')

@@ -3,6 +3,7 @@ from typing import NoReturn
 
 from aiogram import Bot
 from dotenv import load_dotenv
+import logging
 
 load_dotenv()
 
