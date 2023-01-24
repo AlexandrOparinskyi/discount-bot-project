@@ -3,7 +3,7 @@ from aiogram.types import Message, CallbackQuery
 
 from database.database import ConnectDB
 from lexicons.lexicon_ru import LEXICON_RU
-from services.service import get_attributes
+from services.get_attributes import Attributes
 from keyboards.keyboards import create_confirm_keyboard
 
 db = ConnectDB('database.db')
@@ -21,8 +21,9 @@ async def help_command(message: Message):
 
 
 async def send_attributes(message: Message):
-
-    title, image, url, api_url = get_attributes(message.text)
+    attr = Attributes(message.text)
+    title = attr.get_title()
+    image = attr.get_image()
     await message.answer_photo(
         image,
         f"{title}\n\n{LEXICON_RU['item_question']}",
