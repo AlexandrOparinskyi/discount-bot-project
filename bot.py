@@ -7,6 +7,7 @@ from aiogram import Bot, Dispatcher
 from aiogram import exceptions as aio_ex
 
 from config_data.config import load_config
+from handlers.user_handlers import register_user_handlers
 
 logging.basicConfig(
     filename='debug.txt',
@@ -17,7 +18,7 @@ logging.basicConfig(
 
 
 def register_all_handlers(dp: Dispatcher) -> NoReturn:
-    pass
+    register_user_handlers(dp)
 
 
 async def main() -> NoReturn:
@@ -29,7 +30,7 @@ async def main() -> NoReturn:
     try:
         await dp.start_polling()
     except aio_ex:
-        logging.error('Bot dont started')
+        logging.error(aio_ex)
         await bot.close()
 
 
@@ -37,4 +38,4 @@ if __name__ == '__main__':
     try:
         asyncio.run(main())
     except async_ex:
-        logging.error('Error!')
+        logging.error(async_ex)

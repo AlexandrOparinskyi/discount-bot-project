@@ -14,7 +14,8 @@ class Connect:
 
     def bot(self) -> Bot:
         bot = Bot(
-            token=self.token
+            token=self.token,
+            parse_mode='HTML'
         )
         return bot
 
