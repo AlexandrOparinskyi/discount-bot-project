@@ -22,18 +22,24 @@ async def help_command(message: Message):
 
 async def send_attributes(message: Message):
     attr = Attributes(message.text)
-    title = attr.get_title()
-    image = attr.get_image()
+    if not db.exists_item(message.text):
+        db.add_item(
+            message.text,
+            attr.get_title(),
+            attr.get_url(),
+            attr.get_image(),
+            attr.get_api_url()
+        )
     await message.answer_photo(
-        image,
-        f"{title}\n\n{LEXICON_RU['item_question']}",
+        attr.get_image(),
+        f"{attr.get_title()}\n\n{LEXICON_RU['item_question']}",
         reply_markup=create_confirm_keyboard()
     )
 
 
 async def answer_yes(callback: CallbackQuery):
     await callback.message.delete()
-    await callback.message.answer(LEXICON_RU[callback.data].format(item='2345'))
+    await callback.message.answer(LEXICON_RU[callback.data])
 
 
 def register_user_handlers(dp: Dispatcher):

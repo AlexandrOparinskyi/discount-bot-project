@@ -29,12 +29,14 @@ class ConnectDB:
         )
         return bool(result.fetchall())
 
-    def add_item(self, article, title, url, img) -> NoReturn:
+    def add_item(self, article, title, url, img, api_url) -> NoReturn:
         """Добавление товара в БД"""
         self.cursor.execute(
-            "INSERT INTO 'items' (article, title, url, img)",
-            (article, title, url, img)
+            "INSERT INTO 'items' ('article', 'title', 'url', 'image', "
+            "'api_url') VALUES (?, ?, ?, ?, ?)",
+            (article, title, url, img, api_url)
         )
+        return self.connect.commit()
 
     def close(self) -> NoReturn:
         """Закрытие БД"""
