@@ -51,8 +51,8 @@ async def parser(args: list) -> None:
         except KeyError:
             new_price = resp['price']
             new_sale_price = None
-        result = f"Теперь цена на {title} {new_sale_price}👍 вместо {new_price}👎\n\n" \
-                 f"Скорее жми на смайлики <a href='{url}'>💰🤑✔ </a>"
+        result = f"Теперь цена на {title} {new_sale_price}👍 вместо {new_price}" \
+                 f"👎\n\nСкорее жми на смайлики <a href='{url}'>💰🤑✔ </a>"
         if new_sale_price != sale_price:
             users_id = db.get_users_item(item_id)
             db.update_item(item_id, new_price, new_sale_price)

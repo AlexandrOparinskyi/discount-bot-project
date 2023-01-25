@@ -1,15 +1,15 @@
 import asyncio
-import aio_pika
 import logging
-from typing import NoReturn
 from asyncio import exceptions as async_ex
+from typing import NoReturn
 
+import aio_pika
 from aiogram import Bot, Dispatcher
 from aiogram import exceptions as aio_ex
 
 from config_data.config import load_config
-from handlers.user_handlers import register_user_handlers
 from database.database import ConnectDB
+from handlers.user_handlers import register_user_handlers
 
 logging.basicConfig(
     filename='debug.txt',
