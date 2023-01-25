@@ -31,7 +31,10 @@ async def process_message(
     message: aio_pika.abc.AbstractIncomingMessage,
 ) -> None:
     async with message.process():
-        await bot.send_message(424306502, message.body)
+        await bot.send_message(
+            424306502,
+            message.body.decode('utf-8')
+        )
         await asyncio.sleep(1)
 
 
