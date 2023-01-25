@@ -1,4 +1,5 @@
 import asyncio
+import aio_pika
 import logging
 from typing import NoReturn
 from asyncio import exceptions as async_ex
@@ -21,7 +22,34 @@ def register_all_handlers(dp: Dispatcher) -> NoReturn:
     register_user_handlers(dp)
 
 
-async def main() -> NoReturn:
+async def process_message(
+    message: aio_pika.abc.AbstractIncomingMessage,
+) -> None:
+    async with message.process():
+        print(message.body.split('.'))
+        await asyncio.sleep(1)
+
+
+async def rabbit():
+    connection = await aio_pika.connect_robust(
+        "amqp://guest:guest@127.0.0.1/",
+    )
+    queue_name = "parser"
+    channel = await connection.channel()
+
+    await channel.set_qos(prefetch_count=100)
+
+    queue = await channel.declare_queue(queue_name)
+
+    await queue.consume(process_message)
+
+    try:
+        await asyncio.Future()
+    finally:
+        await connection.close()
+
+
+async def connect_bot() -> NoReturn:
     bot: Bot = load_config()
     dp: Dispatcher = Dispatcher(bot)
 
@@ -32,6 +60,13 @@ async def main() -> NoReturn:
     except aio_ex:
         logging.error(aio_ex)
         await bot.close()
+
+
+async def main() -> NoReturn:
+    await asyncio.gather(
+        connect_bot(),
+        rabbit()
+    )
 
 
 if __name__ == '__main__':
