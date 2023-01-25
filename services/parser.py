@@ -31,6 +31,7 @@ async def send(message: str, users: list[tuple[int]]) -> None:
         channel = await connection.channel()
 
         for user in users:
+            print(user)
             await channel.default_exchange.publish(
                 aio_pika.Message(
                     body=message.encode(),
@@ -38,6 +39,7 @@ async def send(message: str, users: list[tuple[int]]) -> None:
                 ),
                 routing_key=routing_key,
             )
+            print('Okey')
 
 
 async def parser(args: list) -> None:

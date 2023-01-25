@@ -32,7 +32,7 @@ async def process_message(
 ) -> None:
     async with message.process():
         await bot.send_message(
-            424306502,
+            int(message.app_id),
             message.body.decode('utf-8')
         )
         await asyncio.sleep(1)
