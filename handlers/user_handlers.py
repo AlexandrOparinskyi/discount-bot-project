@@ -7,7 +7,7 @@ from services.get_attributes import Attributes
 from keyboards.keyboards import create_confirm_keyboard
 
 db = ConnectDB('database.db')
-ARTICLE: str
+ITEM_ID: int
 
 
 def get_article(article: str) -> str:
@@ -26,8 +26,6 @@ async def help_command(message: Message):
 
 
 async def send_attributes(message: Message):
-    global ARTICLE
-    ARTICLE = message.text.lstrip().rstrip()
     if not db.exists_item(message.text):
         attr = Attributes(message.text)
         title = attr.get_title()
@@ -45,6 +43,8 @@ async def send_attributes(message: Message):
     else:
         title, image, price, sale_price = db.get_item(message.text)
     if sale_price is None:
+        global ITEM_ID
+        ITEM_ID = db.get_item(message.text, only_id=True)
         await message.answer_photo(
             image,
             f"{title}\n\n{LEXICON_RU['item_question']}",
@@ -55,10 +55,11 @@ async def send_attributes(message: Message):
 
 
 async def answer_yes(callback: CallbackQuery):
+    print(ITEM_ID)
     await callback.message.delete()
     user_id = callback.from_user.id
-    if not db.exists_users_item(user_id, ARTICLE):
-        db.add_users_item(user_id, ARTICLE)
+    if not db.exists_users_item(user_id, ITEM_ID):
+        db.add_users_item(user_id, ITEM_ID)
     await callback.message.answer(LEXICON_RU[callback.data])
 
 

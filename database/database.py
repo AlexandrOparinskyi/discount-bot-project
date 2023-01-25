@@ -50,21 +50,27 @@ class ConnectDB:
             return r[0]
         return r[2], r[4], r[6], r[7]
 
-    def exists_users_item(self, user_id: int, article: str) -> bool:
+    def exists_users_item(self, user_id: int, item_id: int) -> bool:
         """Проверка наличия актикула для пользователя в БД"""
         result = self.cursor.execute(
-            "SELECT * FROM 'users_item' WHERE user_id = ? AND article = ?",
-            (user_id, article)
+            "SELECT * FROM 'users_item' WHERE user_id = ? AND item_id = ?",
+            (user_id, item_id)
         )
         return bool(result.fetchone())
 
-    def add_users_item(self, user_id: int, article: str) -> None:
+    def add_users_item(self, user_id: int, item_id: int) -> None:
         """Добавление артикула для пользователя в БД"""
         self.cursor.execute(
-            "INSERT INTO 'users_item' ('user_id', 'article') VALUES (?, ?)",
-            (user_id, article)
+            "INSERT INTO 'users_item' ('user_id', 'item_id') VALUES (?, ?)",
+            (user_id, item_id)
         )
         return self.connect.commit()
+
+    def get_users_item(self, item_id):
+        result = self.cursor.execute(
+            "SELECT user_id FROM 'users_item' WHERE item_id = ?", (item_id,)
+        )
+        return result.fetchall()
 
     def get_items_urls(self) -> list[int, str, str, str,
                                      int, Union[int, None]]:

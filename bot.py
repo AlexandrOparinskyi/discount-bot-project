@@ -9,6 +9,7 @@ from aiogram import exceptions as aio_ex
 
 from config_data.config import load_config
 from handlers.user_handlers import register_user_handlers
+from database.database import ConnectDB
 
 logging.basicConfig(
     filename='debug.txt',
@@ -16,6 +17,10 @@ logging.basicConfig(
     level=logging.INFO,
     format=f"%(levelname)s | %(name)s | %(asctime)s | %(message)s"
 )
+
+db = ConnectDB('database.db')
+
+bot: Bot = load_config()
 
 
 def register_all_handlers(dp: Dispatcher) -> NoReturn:
@@ -26,7 +31,7 @@ async def process_message(
     message: aio_pika.abc.AbstractIncomingMessage,
 ) -> None:
     async with message.process():
-        print(message.body.split('.'))
+        await bot.send_message(424306502, message.body)
         await asyncio.sleep(1)
 
 
@@ -50,7 +55,6 @@ async def rabbit():
 
 
 async def connect_bot() -> NoReturn:
-    bot: Bot = load_config()
     dp: Dispatcher = Dispatcher(bot)
 
     register_all_handlers(dp)
